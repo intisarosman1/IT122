@@ -4,14 +4,15 @@ import http from 'http';
 import { parse } from "querystring";
 import { getAll, getBook } from './data.js';
 
+
 http.createServer((req,res) => {
-    var path = req.url.toString();
-    let url = req.url.split("?");
-    let query = parse(url[1]);
+    let url = req.url.split("?");  // separate route from query string
+    let query = parse(url[1]); // convert query string to a JS object
+    var path = url[0].toLowerCase();
     switch(path) {
         case '/':
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify(getAll));
+            res.end(JSON.stringify(getAll()));
             break;
         case '/about':
             res.writeHead(200, {'Content-Type': 'text/plain'});
@@ -19,7 +20,7 @@ http.createServer((req,res) => {
             break;
         case '/detail':
             res.writeHead(200, {'Content-Type': 'text/plain'});
-            res.end(JSON.stringify(getBook("Cinder")));
+            res.end(JSON.stringify(getBook(query.title)));
             break;
         default:
             res.writeHead(404, {'Content-Type': 'text/plain'});
