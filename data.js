@@ -1,4 +1,4 @@
-let books = [
+export let books = [
     { title : "The Hunger Games", author : "Suzanne Collins", genre : "Science Fiction", pages : "374", price : "$7.99" },
     { title : "Cinder", author : "Marissa Meyer", genre : "Science Fiction", pages : "390", price : "$10.99" },
     { title : "The Maze Runner", author : "James Dashner", genre : "Science Fiction", pages : "375", price : "$8.99" },
@@ -12,7 +12,7 @@ const getAll = () => {
 
 const getBook = (title) => {
     return books.find((book) => {
-        return book.title.toLowerCase === title.toLowerCase;
+        return book.title === title;
     });
 };
 

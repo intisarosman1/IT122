@@ -1,0 +1,13 @@
+<html>
+<head>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h2>Home</h2>
+    <hr>
+    <h3>Books</h3>
+    {{#each books}}
+        <li><a href="/detail?title={{title}}">{{title}}</a></li>
+    {{/each}}
+</body>
+</html>
