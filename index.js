@@ -1,8 +1,8 @@
 "use strict"
 
-import * as book from "./data.js";
 import express from 'express';
-import handlebars from "express-handlebars"
+import handlebars from "express-handlebars";
+import { Book } from './book.js';
 
 const app = express();
 app.set("port", process.env.PORT || 3000);
@@ -15,7 +15,11 @@ app.set("view engine", "hbs");
 
 // GET requests
 app.get('/', (req,res) => {
-    res.render('home', {books: book.getAll()});
+    Book.find({}).lean()
+        .then((books) => {
+            res.render('home', { books });
+        })
+        .catch(err => next(err));
 });
 
 // send plain text response
@@ -25,23 +29,20 @@ app.get('/about', (req,res) => {
    });
 
 
-app.get('/detail', (req,res) => {
-    console.log(req.query)
-    let result = book.getBook(req.query.title);
-    res.render("details", {
-        title: req.query.title, 
-        result
-        }
-    );
+app.get('/detail', (req,res,next) => {
+    Book.findOne({ title:req.query.title }).lean()
+        .then((book) => {
+            res.render('details', {result: book} );
+        })
+        .catch(err => next(err));
 });
-
-// handle POST
-app.post('/detail', (req,res) => {
-    console.log(req.body)
-    let found = book.getBook(req.body.title);
-    res.render("details", {title: req.body.title, result: found, books: book.getAll()});
+app.post('/detail', (req,res, next) => {
+    Book.findOne({ title:req.body.title }).lean()
+        .then((book) => {
+            res.render('details', {result: book} );
+        })
+        .catch(err => next(err));
 });
-
 // define 404 handler
 app.use((req,res) => {
     res.type('text/plain'); 
